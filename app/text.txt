@@ -1,0 +1,5 @@
+SSR-> server side rendering. any client/browser. asks server for UI only pre rendered by server
+CSR-> client side rendering, just give data, make UI by browser(browser ma hune intrective)
+
+
+
