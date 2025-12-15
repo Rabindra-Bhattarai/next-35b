@@ -6,9 +6,20 @@ import Link from "next/link";
 export default function HospitalRegisterForm() {
   const [location, setLocation] = useState("");
 
-  // Function to open Google Maps
-  const handleOpenMaps = () => {
-    window.open("https://www.google.com/maps", "_blank");
+  const handleGetLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation(`${latitude}, ${longitude}`);
+        },
+        (error) => {
+          alert("Unable to fetch location: " + error.message);
+        }
+      );
+    } else {
+      alert("Geolocation not supported by your browser.");
+    }
   };
 
   return (
@@ -16,33 +27,6 @@ export default function HospitalRegisterForm() {
       <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
         🏥 Patient Registration
       </h2>
-      <p className="text-center text-gray-600 mb-8">
-        Please fill in your details to access hospital services.
-      </p>
-
-      {/* Full Name */}
-      <div className="mb-4">
-        <label className="block mb-2 text-sm font-semibold text-gray-700">
-          Full Name
-        </label>
-        <input
-          type="text"
-          placeholder="John Doe"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-        />
-      </div>
-
-      {/* Email */}
-      <div className="mb-4">
-        <label className="block mb-2 text-sm font-semibold text-gray-700">
-          Email
-        </label>
-        <input
-          type="email"
-          placeholder="you@hospital.com"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-        />
-      </div>
 
       {/* Location */}
       <div className="mb-6">
@@ -59,10 +43,10 @@ export default function HospitalRegisterForm() {
           />
           <button
             type="button"
-            onClick={handleOpenMaps}
+            onClick={handleGetLocation}
             className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
           >
-            Pick on Map
+            Use My Location
           </button>
         </div>
         {location && (
@@ -72,32 +56,14 @@ export default function HospitalRegisterForm() {
         )}
       </div>
 
-      {/* Password */}
-      <div className="mb-6">
-        <label className="block mb-2 text-sm font-semibold text-gray-700">
-          Password
-        </label>
-        <input
-          type="password"
-          placeholder="••••••••"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-        />
-      </div>
-
       {/* Register Button */}
-      <button
-        className="w-full bg-gradient-to-r from-blue-500 to-teal-500 text-white font-bold py-3 rounded-lg shadow-md transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
-      >
+      <button className="w-full bg-gradient-to-r from-blue-500 to-teal-500 text-white font-bold py-3 rounded-lg shadow-md hover:scale-105 transition">
         Register
       </button>
 
-      {/* Footer */}
       <p className="mt-6 text-center text-sm text-gray-600">
         Already registered?{" "}
-        <Link
-          href="/login"
-          className="text-blue-500 font-medium hover:underline transition duration-300"
-        >
+        <Link href="/login" className="text-blue-500 font-medium hover:underline">
           Login
         </Link>
       </p>
